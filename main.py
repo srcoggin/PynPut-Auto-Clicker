@@ -1,20 +1,28 @@
 from PyQt5.QtWidgets import QMessageBox, QMainWindow
 from UserInterface import Ui_AutoClicker
-from ClickMouse import ClickMouse
 
+import time  
+import threading  
+from pynput.mouse import Button, Controller  
+from pynput.keyboard import Listener, KeyCode 
+
+# button = Button.left  
+# delay = 0.001  
+# startStopButton = KeyCode(char='1')  
+# terminateButton = KeyCode(char='2')
  
-clickmouse = ClickMouse()
+
 class MainWindow():
     def __init__(self):
         self.main_win = QMainWindow()
         self.ui = Ui_AutoClicker()
         self.ui.setupUi(self.main_win)
        
-
+        self.ClickProgram = False
         self.ui.About_Me_Button.clicked.connect(self.About_Me)
-        self.ui.Exit_Button.clicked.connect(clickmouse.exitScript)
+        # self.ui.Exit_Button.clicked.connect(ClickMouse.exitScript)
         self.ui.Save_Info_Button.clicked.connect(self.Save_Info)
-        self.ui.Start_Button.clicked.connect(self.Start_Click)
+        # self.ui.Start_Button.clicked.connect(ClickMouse.startMouseClick)
 
     def About_Me(self):
         msg = QMessageBox()
@@ -30,9 +38,6 @@ Please follow me, and start my Repos!
         msg.setStandardButtons(msg.close)
         msg.exec()
 
-    def Start_Click(self):
-        ClickProgram = True
-
     def Save_Info(self):
         Delay = self.ui.Delay_Time_Input.text()
         Start_Key = self.ui.Start_Key_Input.text()
@@ -40,4 +45,46 @@ Please follow me, and start my Repos!
         return Delay, Start_Key, Stop_Key
 
 
+# class ClickMouse(threading.Thread):  
+#     def __init__(self, delay, button):  
+#         super(ClickMouse, self).__init__()  
+#         self.delay = delay 
+#         self.button = button 
+#         self.running = False  
+#         self.program_running = False  
+
+#     def startMouseClick(self):
+#         self.running = True  
+      
+#     def stopMouseClick(self):  
+#         self.running = False  
+      
+#     def exitScript(self):  
+#         self.stopMouseClick()  
+#         self.program_running = False  
+
+#     def run(self):  
+#         while self.program_running:  
+#             while self.running:  
+#                 mouse.click(self.button)  
+#                 time.sleep(self.delay)  
+#             time.sleep(0.1)  
+
+# mouse = Controller()  
+# clickThread = ClickMouse(delay, button)  
+# clickThread.start()  
+
+
+# def on_press(key):  
+#     if key == startStopButton:  
+#         if clickThread.running:  
+#             clickThread.stopMouseClick()  
+#         else:  
+#             clickThread.startMouseClick()  
+#     elif key == terminateButton:  
+#         clickThread.exitScript()  
+#         listener.stop()  
   
+  
+# with Listener(on_press=on_press) as listener:  
+#     listener.join()
