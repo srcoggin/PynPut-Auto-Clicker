@@ -1,90 +1,64 @@
-from PyQt5.QtWidgets import QMessageBox, QMainWindow
+from PyQt5.QtWidgets import QMessageBox, QMainWindow, QApplication
 from UserInterface import Ui_AutoClicker
+import  sys
+import os
+import time
+import pyautogui
 
-import time  
-import threading  
-from pynput.mouse import Button, Controller  
-from pynput.keyboard import Listener, KeyCode 
-
-# button = Button.left  
-# delay = 0.001  
-# startStopButton = KeyCode(char='1')  
-# terminateButton = KeyCode(char='2')
- 
 
 class MainWindow():
     def __init__(self):
         self.main_win = QMainWindow()
         self.ui = Ui_AutoClicker()
         self.ui.setupUi(self.main_win)
+        
        
-        self.ClickProgram = False
+
         self.ui.About_Me_Button.clicked.connect(self.About_Me)
-        # self.ui.Exit_Button.clicked.connect(ClickMouse.exitScript)
-        self.ui.Save_Info_Button.clicked.connect(self.Save_Info)
-        # self.ui.Start_Button.clicked.connect(ClickMouse.startMouseClick)
+        self.ui.Start_Button.clicked.connect(self.run)
+        self.ui.Exit_Button.clicked.connect(self.exit)
+     
+
+    def exit(self):
+        exit()
 
     def About_Me(self):
         msg = QMessageBox()
         msg.setText('''
 Thank you for using my Automatic Mouse Clicker!
 I hope it helps you on your cookie clicker journey, or whatever clicker game you are playing.
-This application was Coded and Developed by Will Coggins in one boring Literature 11 class
+This application was Coded and Developed by Will Coggins 
+in one boring Literature 11 class
 Please enjoy my other works such as "FIA2", "FIA1", or "Brad-File".
 All of which can be found on my github @srcoggin. 
 Please follow me, and start my Repos! 
 ''')
         msg.setWindowTitle("About Me!")
-        msg.setStandardButtons(msg.close)
+        msg.setStandardButtons(QMessageBox.Close)
         msg.exec()
 
-    def Save_Info(self):
-        Delay = self.ui.Delay_Time_Input.text()
-        Start_Key = self.ui.Start_Key_Input.text()
-        Stop_Key = self.ui.Stop_Key_Input.text()
-        return Delay, Start_Key, Stop_Key
+    def show(self):
+        self.main_win.show()
 
 
-# class ClickMouse(threading.Thread):  
-#     def __init__(self, delay, button):  
-#         super(ClickMouse, self).__init__()  
-#         self.delay = delay 
-#         self.button = button 
-#         self.running = False  
-#         self.program_running = False  
+    def click(self):
+        num2 = int(self.ui.Delay_Time_Input.text())
+        time.sleep(num2)
+        pyautogui.click()
+        self.ui.Delay_Time_Input.clear()
+        self.ui.num_of_clicks.clear()
 
-#     def startMouseClick(self):
-#         self.running = True  
-      
-#     def stopMouseClick(self):  
-#         self.running = False  
-      
-#     def exitScript(self):  
-#         self.stopMouseClick()  
-#         self.program_running = False  
-
-#     def run(self):  
-#         while self.program_running:  
-#             while self.running:  
-#                 mouse.click(self.button)  
-#                 time.sleep(self.delay)  
-#             time.sleep(0.1)  
-
-# mouse = Controller()  
-# clickThread = ClickMouse(delay, button)  
-# clickThread.start()  
+    def run(self):
+        num = int(self.ui.num_of_clicks.text())
+        time.sleep(5)
+        for i in range(num):
+            self.click()
 
 
-# def on_press(key):  
-#     if key == startStopButton:  
-#         if clickThread.running:  
-#             clickThread.stopMouseClick()  
-#         else:  
-#             clickThread.startMouseClick()  
-#     elif key == terminateButton:  
-#         clickThread.exitScript()  
-#         listener.stop()  
-  
-  
-# with Listener(on_press=on_press) as listener:  
-#     listener.join()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    main_win = MainWindow()
+    main_win.show()
+    sys.exit(app.exec_())
